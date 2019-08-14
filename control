@@ -3,7 +3,7 @@ Name: FastAuthentication
 Depends: mobilesubstrate
 Version: 0.0.1
 Architecture: iphoneos-arm
-Description: An awesome MobileSubstrate tweak!
+Description: A tweak to speed up the FaceID popup
 Maintainer: ArandomDev <haow6449@gmail.com>
 Author: ArandomDev <haow6449@gmail.com>
 Section: Tweaks
