@@ -1,7 +1,7 @@
 Package: com.haotestlabs.fastauthentication
 Name: FastAuthentication
 Depends: mobilesubstrate
-Version: 0.0.1
+Version: 1.0.0-1
 Architecture: iphoneos-arm
 Description: A tweak to speed up the FaceID popup
 Maintainer: ArandomDev <haow6449@gmail.com>
