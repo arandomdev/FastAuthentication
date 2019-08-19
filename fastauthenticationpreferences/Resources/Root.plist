@@ -28,7 +28,7 @@
 			<key>showValue</key>
 			<true/>
 			<key>PostNotification</key>
-			<string>com.haotestlabs.fastauthentication/ReloadPrefs</string>
+			<string>com.haotestlabs.fastauthenticationpreferences/ReloadPrefs</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -54,7 +54,7 @@
 			<key>showValue</key>
 			<true/>
 			<key>PostNotification</key>
-			<string>com.haotestlabs.fastauthentication/ReloadPrefs</string>
+			<string>com.haotestlabs.fastauthenticationpreferences/ReloadPrefs</string>
 		</dict>
 	</array>
 	<key>title</key>

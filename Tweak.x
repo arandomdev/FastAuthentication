@@ -1,3 +1,5 @@
+#import <Cephei/HBPreferences.h>
+
 @interface LAUIPearlGlyphView
 @property (nonatomic,readonly) CALayer * contentLayer;
 -(void)_applyStateAnimated:(BOOL)arg1;
@@ -7,33 +9,32 @@
 -(void)dismissWithDelay:(NSTimeInterval)delay completion:(id)completion;
 @end
 
-float FAPCheckmarkTime;
-long long FAPDismissalTime;
+HBPreferences *preferences;
+NSNumber *FAPCheckmarkTime;
+NSNumber *FAPDismissalTime;
 
 %hook LAUIPearlGlyphView
 -(void)_applyStateAnimated:(BOOL)arg1 {
+	float speed = FAPCheckmarkTime.floatValue;
 	CALayer *layer = [self contentLayer];
-	layer.speed = FAPCheckmarkTime;
+	layer.speed = speed;
 
+	HBLogDebug(@"speed: %f", speed);
 	%orig;
 }
 %end
 
 %hook ToastViewController
--(void)dismissWithDelay:(NSTimeInterval)delay completion:(id)completion {
-	%orig(FAPDismissalTime, completion);
+-(void)dismissWithDelay:(NSTimeInterval)dismissalDelay completion:(id)completion {
+	double delay = FAPDismissalTime.doubleValue;
+	%orig(delay, completion);
+
+	HBLogDebug(@"delay: %f", delay);
 }
 %end
 
-static void fastAuthenticationReloadPrefs() {
-	CFPreferencesAppSynchronize(CFSTR("com.haotestlabs.fastauthenticationpreferences"));
-
-	NSDictionary *prefs = [NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/com.haotestlabs.fastauthenticationpreferences.plist"];
-	FAPCheckmarkTime = prefs[@"FAPCheckmarkTime"] ? ((NSNumber *)prefs[@"FAPCheckmarkTime"]).floatValue : 1;
-	FAPDismissalTime = prefs[@"FAPDismissalTime"] ? ((NSNumber *)prefs[@"FAPDismissalTime"]).longLongValue : 2;
-}
-
 %ctor {
-	fastAuthenticationReloadPrefs();
-	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)fastAuthenticationReloadPrefs, CFSTR("com.haotestlabs.fastauthentication/ReloadPrefs"), NULL, 0);
+	preferences = [[HBPreferences alloc] initWithIdentifier:@"com.haotestlabs.fastauthenticationpreferences"];
+	[preferences registerObject:&FAPCheckmarkTime default:[NSNumber numberWithInt:1] forKey:@"FAPCheckmarkTime"];
+	[preferences registerObject:&FAPDismissalTime default:[NSNumber numberWithInt:2] forKey:@"FAPDismissalTime"];
 }
